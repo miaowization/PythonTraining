@@ -45,7 +45,6 @@ class add_group(unittest.TestCase):
         wd.find_element_by_link_text("group page").click()
 
     def logout(self, wd):
-        # logout
         wd.find_element_by_link_text("Logout").click()
 
     def create_group(self, wd, group):
@@ -65,11 +64,9 @@ class add_group(unittest.TestCase):
 
 
     def open_groups_page(self, wd):
-        # open group page
         wd.find_element_by_link_text("groups").click()
 
     def login(self, wd, username, password):
-        # login
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
