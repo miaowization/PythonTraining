@@ -17,7 +17,7 @@ def test_add_contact(app):
                       email1="contact@mail.com", email2="contactik@ya.ru", email3="cont@gmail.com",
                       homepage="contact.ya.ru", address="Lenina 22", home="334475", notes="Do not write here")
     app.session.login(username="admin", password="secret")
-    app.create_contact(contact)
+    app.contact.create(contact)
     app.session.logout()
 
 
@@ -29,7 +29,7 @@ def test_add_empty_contact(app):
                             email1="", email2="", email3="",
                             homepage="", address="", home="", notes="")
     app.session.login(username="admin", password="secret")
-    app.create_contact(empty_contact)
+    app.contact.create(empty_contact)
     app.session.logout()
 
 
