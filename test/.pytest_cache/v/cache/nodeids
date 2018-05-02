@@ -1,1 +1,3 @@
-[]
+[
+  "edit_group.py::test_edit_first_group"
+]

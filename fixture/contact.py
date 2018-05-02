@@ -67,3 +67,22 @@ class ContactHelper:
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         wd.find_element_by_css_selector("html").click()
         self.return_to_home_page()
+
+    def delete_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//html//div[2]/input[1]").click()
+        wd.switch_to_alert().accept()
+
+    def edit_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath(
+            "/html[1]/body[1]/div[1]/div[4]/form[2]/table[1]/tbody[1]/tr[2]/td[8]/a[1]/img[1]").click()
+        wd.find_element_by_name("firstname").click()
+        wd.find_element_by_name("firstname").clear()
+        wd.find_element_by_name("firstname").send_keys("EditedContact")
+        wd.find_element_by_xpath("/html[1]/body[1]/div[1]/div[4]/form[1]/input[1]").click()
+
+
+
+
