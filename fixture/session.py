@@ -7,26 +7,25 @@ class SessionHelper:
         wd = self.app.wd
         self.app.open_home_page()
         wd.find_element_by_id("header").click()
-        wd.find_element_by_name("user").click()
-        wd.find_element_by_name("user").clear()
-        wd.find_element_by_name("user").send_keys(username)
-        wd.find_element_by_id("LoginForm").click()
-        wd.find_element_by_name("pass").click()
-        wd.find_element_by_name("pass").clear()
-        wd.find_element_by_name("pass").send_keys(password)
+        self.fill_in_textbox("user", username)
+        self.fill_in_textbox("pass", password)
         wd.find_element_by_xpath("//form[@id='LoginForm']/input[3]").click()
+
+    def fill_in_textbox(self, field_name, text):
+        wd = self.app.wd
+        wd.find_element_by_name(field_name).click()
+        wd.find_element_by_name(field_name).clear()
+        wd.find_element_by_name(field_name).send_keys(text)
 
     def logout(self):
         wd = self.app.wd
         wd.find_element_by_link_text("Logout").click()
 
     def ensure_logout(self):
-        wd = self.app.wd
         if self.is_logged_in():
             self.logout()
 
     def ensure_login(self, username, password):
-        wd = self.app.wd
         if self.is_logged_in():
             if self.is_logged_in_as(username):
                 return
