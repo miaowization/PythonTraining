@@ -9,7 +9,6 @@ def test_add_contact(app):
                       homepage="contact.ya.ru", address="Lenina 22", home="334475", notes="Do not write here")
     app.session.login(username="admin", password="secret")
     app.contact.create(contact)
-    app.session.logout()
 
 
 def test_add_empty_contact(app):
@@ -21,7 +20,7 @@ def test_add_empty_contact(app):
                             homepage="", address="", home="", notes="")
     app.session.login(username="admin", password="secret")
     app.contact.create(empty_contact)
-    app.session.logout()
+
 
 
 
