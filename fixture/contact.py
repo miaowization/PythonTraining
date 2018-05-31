@@ -1,20 +1,22 @@
+from model.contact import Contact
 class ContactHelper:
 
     def __init__(self, app):
         self.app = app
 
-    def return_to_home_page(self):
+    def open_home_page(self):
         wd = self.app.wd
         if not (wd.current_url.endswith("/index.php") and len(wd.find_elements_by_name("searchform"))) > 0:
             wd.get("http://localhost/addressbook/index.php")
 
     def create(self, contact):
         wd = self.app.wd
+        self.open_home_page()
         wd.find_element_by_link_text("add new").click()
         self.fill_contact_form(contact)
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         wd.find_element_by_css_selector("html").click()
-        self.return_to_home_page()
+        self.open_home_page()
 
     def fill_contact_form(self, contact):
         self.change_field_value("firstname", contact.first_name)
@@ -49,19 +51,26 @@ class ContactHelper:
         wd.find_element_by_xpath("//html//div[2]/input[1]").click()
         wd.switch_to_alert().accept()
 
-    def edit_first_contact(self):
+    def edit_first_contact(self, contact):
         wd = self.app.wd
         wd.find_element_by_xpath(
             "/html[1]/body[1]/div[1]/div[4]/form[2]/table[1]/tbody[1]/tr[2]/td[8]/a[1]/img[1]").click()
-        wd.find_element_by_name("firstname").click()
-        wd.find_element_by_name("firstname").clear()
-        wd.find_element_by_name("firstname").send_keys("EditedContact")
+        self.fill_contact_form(contact)
         wd.find_element_by_xpath("/html[1]/body[1]/div[1]/div[4]/form[1]/input[1]").click()
 
     def count(self):
         wd = self.app.wd
-        self.return_to_home_page()
+        self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
-
-
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.open_home_page()
+        contacts = []
+        for element in wd.find_elements_by_name('entry'):
+            id = element.find_element_by_css_selector('input[name="selected[]"]').get_attribute('value')
+            box = element.find_elements_by_css_selector('td')
+            first_name = box[2].text
+            last_name = box[1].text
+            contacts.append(Contact(first_name=first_name, last_name=last_name, id=id))
+        return contacts
