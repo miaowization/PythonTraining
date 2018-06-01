@@ -17,6 +17,7 @@ class ContactHelper:
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         wd.find_element_by_css_selector("html").click()
         self.open_home_page()
+        self.contact_cache = None
 
     def fill_contact_form(self, contact):
         self.change_field_value("firstname", contact.first_name)
@@ -57,20 +58,24 @@ class ContactHelper:
             "/html[1]/body[1]/div[1]/div[4]/form[2]/table[1]/tbody[1]/tr[2]/td[8]/a[1]/img[1]").click()
         self.fill_contact_form(contact)
         wd.find_element_by_xpath("/html[1]/body[1]/div[1]/div[4]/form[1]/input[1]").click()
+        self.contact_cache = None
 
     def count(self):
         wd = self.app.wd
         self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.open_home_page()
-        contacts = []
-        for element in wd.find_elements_by_name('entry'):
-            id = element.find_element_by_css_selector('input[name="selected[]"]').get_attribute('value')
-            box = element.find_elements_by_css_selector('td')
-            first_name = box[2].text
-            last_name = box[1].text
-            contacts.append(Contact(first_name=first_name, last_name=last_name, id=id))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.contact_cache = []
+            for element in wd.find_elements_by_name('entry'):
+                id = element.find_element_by_css_selector('input[name="selected[]"]').get_attribute('value')
+                box = element.find_elements_by_css_selector('td')
+                first_name = box[2].text
+                last_name = box[1].text
+                self.contact_cache.append(Contact(first_name=first_name, last_name=last_name, id=id))
+        return list(self.contact_cache)
