@@ -18,11 +18,11 @@ class GroupHelper:
         self.group_cache = None
 
     def fill_group_form(self, group):
-        self.change_field("group_name", group.name)
-        self.change_field("group_header", group.header)
-        self.change_field("group_footer", group.footer)
+        self.change_field_value("group_name", group.name)
+        self.change_field_value("group_header", group.header)
+        self.change_field_value("group_footer", group.footer)
 
-    def change_field(self, field_name, text):
+    def change_field_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
             wd.find_element_by_name(field_name).click()
