@@ -13,8 +13,6 @@ def test_edit_first_contact_name(app):
 
 def test_edit_random_contact(app):
     contact = Contact(first_name="test", middle_name="test", last_name="test", nickname="test")
-    modified_contact = Contact(first_name="New first name", middle_name="New middle name",
-                                           last_name="New last name")
     old_contacts = app.contact.get_contact_list()
     if app.contact.count() == 0:
         app.contact.create(contact)

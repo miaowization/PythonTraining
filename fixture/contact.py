@@ -34,7 +34,7 @@ class ContactHelper:
         self.change_field_value("email3", contact.email3)
         self.change_field_value("homepage", contact.homepage)
         self.change_field_value("address2", contact.address)
-        self.change_field_value("phone2", contact.secondary_phone)
+        self.change_field_value("phone2", contact.secondary_telephone)
         self.change_field_value("notes", contact.notes)
 
     def change_field_value(self, field_name, text):
@@ -49,6 +49,14 @@ class ContactHelper:
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//html//div[2]/input[1]").click()
         wd.switch_to_alert().accept()
+        self.contact_cache = None
+
+    def delete_contact_by_index(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.open_contact_to_edit_by_index(index)
+        wd.find_element_by_xpath(".//*[@id='content']/form[2]/input[2]").click()
+        self.app.open_home_page()
         self.contact_cache = None
 
     def edit_contact_by_index(self, contact, index):
