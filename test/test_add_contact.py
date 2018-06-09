@@ -22,11 +22,6 @@ testdata = [Contact(first_name=first_name, middle_name=middle_name, last_name=la
             for first_name in ["", random_string("first_name", 10)]
             for middle_name in ["", random_string("middle_name", 10)]
             for last_name in ["", random_string("last_name", 10)]
-            # for nickname in ["", random_string("nickname", 10)]
-            # nickname=nickname
-            # for title in ["", random_string("title", 10)]
-            # for company in ["", random_string("company", 5)]
-            # for company_address in ["", random_string("company_address", 10)]
             for home_telephone in ["", random_digits(10)]
             for mobile_telephone in ["", random_digits(10)]
             for work_telephone in ["", random_digits(10)]
@@ -38,15 +33,22 @@ testdata = [Contact(first_name=first_name, middle_name=middle_name, last_name=la
             # for address in ["", random_string("address", 20)]
             # for secondary_telephone in ["", random_digits(10)]
             # for notes in ["", random_string("notes", 20)]
+            # for nickname in ["", random_string("nickname", 10)]
+            # nickname=nickname
+            # for title in ["", random_string("title", 10)]
+            # for company in ["", random_string("company", 5)]
+            # for company_address in ["", random_string("company_address", 10)]
 ]
 
 
-@pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])
-def test_add_contact(app, contact):
+def test_add_contact(app, json_contacts):
+    contact = json_contacts
     old_contacts = app.contact.get_contact_list()
     app.contact.create(contact)
+    assert len(old_contacts) + 1 == app.contact.count()
+    old_contacts.append(contact)
     new_contacts = app.contact.get_contact_list()
-    assert len(old_contacts) + 1 == len(new_contacts)
+    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
 
 
 # def test_add_empty_contact(app):
