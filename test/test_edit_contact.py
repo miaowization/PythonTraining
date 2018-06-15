@@ -11,16 +11,18 @@ def test_edit_first_contact_name(app):
     assert len(old_contacts) == len(new_contacts)
 
 
-def test_edit_random_contact(app):
-    contact = Contact(first_name="test", middle_name="test", last_name="test", nickname="test")
-    old_contacts = app.contact.get_contact_list()
-    if app.contact.count() == 0:
-        app.contact.create(contact)
+def test_edit_random_contact(app, db, json_contacts, check_ui):
+    contact = json_contacts
+    if len(db.get_contact_list()) == 0:
+        app.contact.add(contact)
+    old_contacts = db.get_contact_list()
     index = randrange(len(old_contacts))
     contact.id = old_contacts[index].id
-    app.contact.edit_contact_by_index(contact, index)
-    assert len(old_contacts) == app.contact.count()
-    new_contacts = app.contact.get_contact_list()
+    app.contact.edit_contact_by_id(contact.id, contact)
+    new_contacts = db.get_contact_list()
     old_contacts[index] = contact
-    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts,key=Contact.id_or_max)
+    assert len(old_contacts) == len(new_contacts)
+    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+    if check_ui:
+        assert sorted(new_contacts, key=Contact.id_or_max) == sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
 

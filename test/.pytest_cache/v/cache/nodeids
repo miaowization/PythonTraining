@@ -1,3 +1,13 @@
 [
-  "test_phones.py::test_phones_on_home_page"
+  "test_edit_group.py::test_edit_group_name[None:;;]",
+  "test_edit_group.py::test_edit_group_name[None:name;headerNIL@ #D;footer]",
+  "test_edit_group.py::test_edit_group_name[None:name)kmNA\\\\Q;;header   Jh><K5;footerfRz]",
+  "test_edit_group.py::test_edit_group_name[None:nameu 2o57x1;header +-/*wy(a;footer:E]",
+  "test_edit_group.py::test_edit_group_name[None:name;headerb!=;footer%^ia2Z%]",
+  "test_edit_group.py::test_edit_group_name[None:name2+dbh` ;header<Rsf  ;footera7J*]",
+  "test_edit_group.py::test_edit_group_name[None:named;header|eZ;footer7I@~ ]",
+  "test_edit_group.py::test_edit_group_name[None:nameKI];.;header6Kwt S;footerB Sxc)>q]",
+  "test_edit_group.py::test_edit_group_name[None:name1H}*coY\\\\;header 9P<VW;footer# a/4]",
+  "test_edit_group.py::test_edit_group_name[None:name]p}4N ~;headerUH ;footer 5|h]",
+  "test_edit_group.py::test_edit_group_name[None:nameY-b}xq;header:g9O ;footerge8R3X]"
 ]
