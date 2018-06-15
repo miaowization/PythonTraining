@@ -44,29 +44,7 @@ class ContactHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
-    def delete_first_contact(self):
-        wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
-        wd.find_element_by_xpath("//html//div[2]/input[1]").click()
-        wd.switch_to_alert().accept()
-        self.contact_cache = None
-
-    def delete_contact_by_index(self, index):
-        wd = self.app.wd
-        self.app.open_home_page()
-        self.open_contact_to_edit_by_index(index)
-        wd.find_element_by_xpath(".//*[@id='content']/form[2]/input[2]").click()
-        self.app.open_home_page()
-        self.contact_cache = None
-
-    def edit_contact_by_index(self, contact, index):
-        wd = self.app.wd
-        self.app.open_home_page()
-        self.open_contact_to_edit_by_index(index)
-        self.fill_contact_form(contact)
-        wd.find_element_by_name("update").click()
-        self.app.open_home_page()
-        self.contact_cache = None
+    # Open
 
     def open_contact_to_edit_by_index(self, index):
         wd = self.app.wd
@@ -82,12 +60,59 @@ class ContactHelper:
         cell = row.find_elements_by_tag_name("td")[6]
         cell.find_element_by_tag_name("a").click()
 
+    # Edit
+
+    def edit_contact_by_index(self, contact, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.open_contact_to_edit_by_index(index)
+        self.fill_contact_form(contact)
+        wd.find_element_by_name("update").click()
+        self.app.open_home_page()
+        self.contact_cache = None
+
     def edit_first_contact(self, contact):
         wd = self.app.wd
         self.open_contact_to_edit_by_index(0)
         self.fill_contact_form(contact)
         wd.find_element_by_name("update").click()
         self.contact_cache = None
+
+    # Delete
+
+    def delete_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//html//div[2]/input[1]").click()
+        wd.switch_to_alert().accept()
+        self.contact_cache = None
+
+    def delete_contact_by_index(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.open_contact_to_edit_by_index(index)
+        wd.find_element_by_xpath(".//*[@id='content']/form[2]/input[2]").click()
+        self.app.open_home_page()
+        self.contact_cache = None
+
+    def delete_contact_by_id(self, id):
+        wd= self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_id(id)
+        wd.find_element_by_css_selector('input[value="Delete"]').click()
+        wd.switch_to_alert().accept()
+        self.contact_cache = None
+        self.app.open_home_page()
+
+    # Select
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("#maintable input[value='%s']" % id).click()
+
+    def select_contact_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
 
     def count(self):
         wd = self.app.wd
