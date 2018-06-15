@@ -138,15 +138,16 @@ class ContactHelper:
             wd = self.app.wd
             self.app.open_home_page()
             self.contact_cache = []
-            for row in wd.find_elements_by_name("entry"):
-                cells = row.find_elements_by_tag_name("td")
-                id = row.find_element_by_css_selector('input[name="selected[]"]').get_attribute('value')
+            for element in wd.find_elements_by_name('entry'):
+                id = element.find_element_by_css_selector('input[name="selected[]"]').get_attribute('value')
+                cells = element.find_elements_by_css_selector('td')
                 first_name = cells[2].text
                 last_name = cells[1].text
-                all_phones = cells[5].text
+                address = cells[3].text
                 all_emails = cells[4].text
+                all_phones = cells[5].text
                 self.contact_cache.append(Contact(first_name=first_name, last_name=last_name, id=id,
-                                                  all_phones_from_home_page=all_phones,
+                                                  all_phones_from_home_page=all_phones, address=address,
                                                   all_emails_from_home_page=all_emails))
         return list(self.contact_cache)
 
@@ -193,4 +194,5 @@ class ContactHelper:
     def merge_emails_like_on_home_page(self, contact):
         return "\n".join(filter(lambda x: x != "", filter(lambda x: x is not None,
                                                           [contact.email1, contact.email2, contact.email3])))
+
 
