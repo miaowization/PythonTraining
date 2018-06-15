@@ -1,3 +1,5 @@
+from selenium.webdriver.support.select import Select
+
 from model.contact import Contact
 import re
 
@@ -44,6 +46,19 @@ class ContactHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
+
+    def add_contact_to_group(self,index,id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_index(index)
+        self.select_group_for_contact(id)
+        wd.find_element_by_name("add").click()
+
+    def select_group_for_contact(self,id):
+        wd = self.app.wd
+        select = Select(wd.find_element_by_css_selector("select[name='to_group']"))
+        select.select_by_value('%s' % id)
+
     # Open
 
     def open_contact_to_edit_by_index(self, index):
@@ -59,6 +74,11 @@ class ContactHelper:
         row = wd.find_elements_by_name("entry")[index]
         cell = row.find_elements_by_tag_name("td")[6]
         cell.find_element_by_tag_name("a").click()
+
+    def open_group_with_contact_page(self,id):
+        wd = self.app.wd
+        select = Select(wd.find_element_by_css_selector("select[name='group']"))
+        select.select_by_value('%s' % id)
 
     # Edit
 
@@ -111,6 +131,14 @@ class ContactHelper:
         wd.switch_to_alert().accept()
         self.contact_cache = None
         self.app.open_home_page()
+
+    def delete_contact_from_group(self, index):
+        wd = self.app.wd
+        self.select_contact_by_index(index)
+        wd.find_element_by_name("remove").click()
+        wd.find_element_by_link_text("home").click()
+        self.app.open_home_page()
+        self.contact_cache = None
 
     # Select
 
@@ -180,6 +208,22 @@ class ContactHelper:
         return Contact(home_telephone=home_telephone,
                        mobile_telephone=mobile_telephone, work_telephone=work_telephone,
                        secondary_telephone=secondary_telephone)
+
+    def get_contact_list_from_group_page(self):
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.contact_cache =[]
+            for element in wd.find_elements_by_name("entry"):
+                cells = element.find_elements_by_tag_name("td")
+                first_name = cells[2].text
+                last_name = cells[1].text
+                address= cells[3].text
+                all_emails=cells[4].text
+                id = cells[0].find_element_by_tag_name("input").get_attribute("id")
+                all_phones= cells[5].text
+                self.contact_cache.append(Contact(last_name=last_name,first_name = first_name, id=id, address=address,
+                                                  all_emails_from_home_page=all_emails, all_phones_from_home_page=all_phones))
+        return list(self.contact_cache)
 
     def clear(self, s):
         return re.sub("[()* -]", "", s)
